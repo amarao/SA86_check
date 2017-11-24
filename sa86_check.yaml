@@ -1,0 +1,34 @@
+---
+- hosts: all
+  tasks:
+  - name: Creating temp directory
+    file: path=/tmp/SA00086 state=directory
+  - name: download SA86
+    get_url:
+      url: https://downloadmirror.intel.com/27150/eng/SA00086_Linux.tar.gz
+      dest: /tmp/SA00086
+  - name: Unpack
+    unarchive:
+      src: /tmp/SA00086/SA00086_Linux.tar.gz
+      dest: /tmp/SA00086/
+      remote_src: yes
+      creates: /tmp/SA00086/intel_sa00086.py
+  - name: Running check
+    become: yes
+    command: /tmp/SA00086/intel_sa00086.py
+    register: output
+    failed_when: false
+  - name: All output
+    debug: var=output
+
+  - name: Status
+    debug: msg="HOST IS VULNERABLE!!!"
+    when: "'This system is vulnerable' in output.stdout"
+
+  - name: Status
+    debug: msg="Host status is unknown"
+    when: "'Detection Error' in output.stdout"
+
+  - name: Status`
+    debug: msg="Host is safe! :)"
+    when: "'This system is not vulnerable' in output.stdout"
