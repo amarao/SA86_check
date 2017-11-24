@@ -12,12 +12,9 @@ How to run
 ```
 ansible-playbook -i host1,host2,host3, sa86_check.yaml
 ```
-(note: if you are using one host, use is with coma at end: `-i host,`)
+(note: if you are using one host, use it with coma at end: `-i host,`)
 
 Or, if you have your inventory:
 ```
 ansible-playbook -i your_inventory sa86_check.yaml
 ```
-
-Result: output to stdout of check result. Green is not vulnerable, yellow if vulnerable or
-unknown.
